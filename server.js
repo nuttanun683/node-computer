@@ -52,7 +52,7 @@ app.get('/order', function(req, res) {
   })
   app.get('/top_product', function(req, res) {
     connection.query(
-      `SELECT p.productId, SUM(o.quantity) AS top_products
+      `SELECT p.productName,p.productId, SUM(o.quantity) AS top_products
       FROM a1_product p 
       LEFT JOIN a1_order o
       ON o.orderId = p.productId
