@@ -52,12 +52,7 @@ app.get('/order', function(req, res) {
   })
   app.get('/top_product', function(req, res) {
     connection.query(
-      `SELECT p.productName,p.productId, SUM(o.quantity) AS top_product
-      FROM a1_product p 
-      LEFT JOIN a1_order o
-      ON o.orderId = p.productId
-      GROUP BY p.productId  
-      ORDER BY top_product  DESC;`,
+      `SELECT p.productName,p.productId, SUM(o.quantity) AS top_product FROM a1_order o LEFT JOIN a1_product p ON o.orderId = p.productId GROUP BY p.productName ,p.productId ORDER BY top_product DESC;`,
       function(err, results) {
         console.log(results) //แสดงผลที่ console
         res.json(results) //ตอบกลับ request
