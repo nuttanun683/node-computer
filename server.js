@@ -50,6 +50,29 @@ app.get('/order', function(req, res) {
       }
     )
   })
+  app.get('/top_product', function(req, res) {
+    connection.query(
+      `SELECT c.customerId, SUM(o.quantity) AS top_products
+      FROM a1_customer c 
+      LEFT JOIN a1_order o
+      ON o.orderId = c.customerId
+      GROUP BY c.customerId  
+      ORDER BY top_products  DESC;`,
+      function(err, results) {
+        console.log(results) //แสดงผลที่ console
+        res.json(results) //ตอบกลับ request
+      }
+    )
+  })
+  app.get('/top_customer', function(req, res) {
+    connection.query(
+      `SELECT p.productId, SUM(p.price) AS priceSum FROM a1_product p LEFT JOIN a1_order o ON o.orderId = p.productId GROUP BY p.productId;`,
+      function(err, results) {
+        console.log(results) //แสดงผลที่ console
+        res.json(results) //ตอบกลับ request
+      }
+    )
+  })
   app.get('/product_price', function (req, res) {
     connection.query(
         `SELECT id, productName, price
@@ -60,6 +83,18 @@ app.get('/order', function(req, res) {
         }
     )
 })//
+app.post('/order', function(req, res) {
+  const values = req.body
+  console.log(values)
+  connection.query(
+    'INSERT INTO a1_order (orderid, customerid, productid, quantity) VALUES ?', [values],
+    function(err, results) {
+      console.log(results) //แสดงผลที่ console
+      res.json(results) //ตอบกลับ request
+    }
+  )
+})
+
 
 app.listen(5000, () => {
   console.log('Server is started.')
