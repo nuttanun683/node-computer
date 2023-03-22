@@ -61,7 +61,11 @@ app.get('/order', function(req, res) {
   })
   app.get('/top_customer', function(req, res) {
     connection.query(
-      `SELECT p.productId, SUM(p.price) AS priceSum FROM a1_product p LEFT JOIN a1_order o ON o.orderId = p.productId GROUP BY p.productId;`,
+      `SELECT c.fullname ,c.email, SUM(o.quantity*p.price) AS top_customer 
+      FROM a1_customer c 
+      LEFT JOIN a1_order o ON o.customerId = c.customerId
+      LEFT JOIN a1_product p ON o.productId = p.productId
+      GROUP BY c.fullname ,c.email ORDER BY top_customer DESC;`,
       function(err, results) {
         console.log(results) //แสดงผลที่ console
         res.json(results) //ตอบกลับ request
