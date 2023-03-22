@@ -50,6 +50,16 @@ app.get('/order', function(req, res) {
       }
     )
   })
+  app.get('/product_price', function (req, res) {
+    connection.query(
+        `SELECT id, productName, price
+       FROM pet
+       ORDER BY price;`,
+        function (err, results) {
+            res.json(results)
+        }
+    )
+})//
 
 app.listen(5000, () => {
   console.log('Server is started.')
